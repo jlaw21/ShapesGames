@@ -29,6 +29,16 @@ public class Shape {
         this.y = y;
     }
 
+    public Rectangle getBounds(){
+        return new Rectangle(x, y, width, height);
+    }
+
+    public boolean collidesWith(Shape other){
+
+        return this.getBounds().intersects(other.getBounds());
+
+    }
+
 
     public void paint(Graphics g){
 

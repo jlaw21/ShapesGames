@@ -14,6 +14,7 @@ public class Board extends JPanel implements ActionListener {
 
 
     List<Shape> actors = new ArrayList<Shape>();
+    ArrayList<Shape> bullets = new ArrayList<Shape>();
 
     final int enemyNum = 5;
 
@@ -40,11 +41,37 @@ public class Board extends JPanel implements ActionListener {
         System.out.println(_ENEMY_MOVE_RANGE);
     }
 
+    public void addBullets(){
+
+        bullets.add(new Bullet(Color.blue, actors.get(0).x, actors.get(0).y, 10));
+
+    }
+
+    public void setPlayerPos(int x, int y){
+        actors.get(0).setPosition(x, y);
+    }
+
+    public void checkCollisions(){
+
+        for(int i = 0; i < bullets.size(); i++){
+            for(int j = 0; j < actors.size(); j++){
+                if(bullets.get(i).collidesWith(actors.get(j))){
+                    System.out.println("HIT ENEMY");
+                }
+            }
+        }
+
+    }
+
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
         for(Shape actor:actors){
             actor.paint(g);
+        }
+
+        for(Shape bullet:bullets){
+            bullet.paint(g);
         }
     }
 
@@ -53,6 +80,8 @@ public class Board extends JPanel implements ActionListener {
 
         int x = 0;
         int y = 0;
+
+        checkCollisions();
 
         for(int i = 1; i < actors.size(); i++){
             x = actors.get(i).startingX;
@@ -64,6 +93,11 @@ public class Board extends JPanel implements ActionListener {
                 actors.get(i).setPosition(actors.get(i).x, actors.get(i).y + 20);
             }
 
+        }
+
+        for(Shape bullet:bullets){
+            bullet.dy = 8;
+            bullet.move(0, 0, bullet.y, 0, false, true);
         }
 
         repaint();
